@@ -1,1 +1,90 @@
-/* TODO */
+/* #region Global */
+:root {
+	--bg: #343331;
+	--bg2: #212120;
+	--text: #dbdbdb;
+	--text-h: #fff;
+	--accent: #c81414;
+	--accent2: #f6b307;
+
+	@media (prefers-color-scheme: light) {
+		--bg: #e3ded9;
+		--bg2: #afaa97;
+		--text: #282624;
+		--text-h: #000;
+		--accent2: #6F4F00;
+	}
+
+	--font: system-ui, "Segoe UI", Roboto, sans-serif;
+
+	font: 18px var(--font);
+	color-scheme: light dark;
+	color: var(--text);
+	background-color: var(--bg);
+
+	@media (max-width: 1024px) {
+		font-size: 16px;
+	}
+}
+
+body {
+	margin: 0;
+	display: grid;
+	min-height: 100vh;
+	grid-template-rows: auto 1fr;
+
+	@media (min-width: 768px) {
+		grid-template-rows: 1fr;
+		grid-template-columns: auto 1fr;
+	}
+}
+
+h1, h2, h3, h4, h5, h6 {
+	color: var(--text-h);
+	margin: 0;
+}
+/* #endregion Global */
+
+
+/* #region Header */
+#sitehead {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	background-color: var(--bg2);
+	padding: 1em;
+
+	h1 {
+		max-width: 14em;
+		text-transform: uppercase;
+		text-align: center;
+		font-weight: normal;
+		font-size: 1.1em;
+		color: var(--accent2);
+
+		img {
+			display: block;
+			position: relative;
+			inset-inline-start: 0.5em;
+		}
+
+		.small {
+			display: block;
+			margin-block: -1.75em 0.5em;
+			--mycolor: rgb(from var(--bg2) r g b / 0.85);
+			background-color: var(--mycolor);
+			box-shadow: 0 0 0.2em 0.2em var(--mycolor);
+			position: relative;
+			z-index: 1;
+			line-height: 1;
+		}
+	}
+
+	img {
+		max-width: 100%;
+		height: auto;
+	}
+}
+
+#autosave { font-size: 0.8em }
+/* #endregion Header */
