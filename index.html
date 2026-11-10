@@ -715,6 +715,12 @@ function makeItem(data, id, format, tiers, label) {
 			break;
 	}
 
+	// Mark completion on pageload
+	const last = Array.from(item.querySelectorAll("input")).at(-1);
+	if (last.type === "number")
+		toggleItem(last, parseInt(last.value) === parseInt(last.max));
+	else toggleItem(last.parentElement.classList.contains("tier") ? last.parentElement : last, last.checked);
+
 	return [item, t];
 }
 
@@ -726,7 +732,7 @@ function makeCheckbox(togglesParent = false) {
 
 	if (togglesParent)
 		input.addEventListener("change", e => {
-			e.currentTarget.closest(".item").classList[e.currentTarget.checked ? "add" : "remove"]("checked");
+			toggleItem(e.currentTarget, e.currentTarget.checked);
 			updateProgress(input);
 		})
 
