@@ -208,18 +208,15 @@ const DATA = [
 		name: "Pact of Punishment",
 		format: "variable",
 		groups: [
-			{ name: "Individual weapons", format: "number", tiers: 20, items: [
-				{ name: "Stygius" },
-				{ name: "Varatha" },
-				{ name: "Coronacht" },
-				{ name: "Aegis" },
-				{ name: "Malphon" },
-				{ name: "Exagryph" },
-			]},
-			{ name: "Overall", format: "boolean", items: [
-				{ name: "8 Heat",	description: "Earn the first Skelly statue"		},
-				{ name: "16 Heat",	description: "Earn the second Skelly statue"	},
-				{ name: "32 Heat",	description: "Earn the third Skelly statue"		},
+			{ name: "Escape under Heat levels", format: "variable", items: [
+				{ name: "Stygius",		format: "number",	tiers: 20			},
+				{ name: "Varatha",		format: "number",	tiers: 20			},
+				{ name: "Coronacht",	format: "number",	tiers: 20			},
+				{ name: "Aegis",		format: "number",	tiers: 20			},
+				{ name: "Malphon",		format: "number",	tiers: 20			},
+				{ name: "Exagryph",		format: "number",	tiers: 20			},
+				{ name: "Overall",	description: "Unlocks Skelly's statue prizes",
+										format: "upgrades",	label: ["8🔥", "16🔥", "32🔥"]	},
 			]},
 		],
 	},
@@ -628,7 +625,7 @@ function addGroup({ name, format, tiers, items, label }, index, section) {
 	heading.innerText = name;
 	group.append(heading);
 
-	items.forEach(iData => group.append(makeItem(iData, `row${total}`, format, tiers, label)))
+	items.forEach(iData => group.append(makeItem(iData, `row${total}`, iData.format ?? format, iData.tiers ?? tiers, iData.label ?? label)))
 
 	section.append(group);
 }
@@ -637,7 +634,6 @@ function makeItem(data, id, format, tiers, label) {
 	const item = document.createElement(format === "boolean" ? "label" : "div");
 	item.classList.add("item");
 	item.id = id;
-	if (!!data.tiers) tiers = data.tiers;
 
 	const heading = document.createElement("p");
 	heading.classList.add("label");
@@ -662,6 +658,15 @@ function makeItem(data, id, format, tiers, label) {
 			item._total = 2;
 			break;
 
+		case "upgrades":
+			makeCheckboxes(item, !!tiers ? (new Array(tiers)).fill(0).map((_, i) => 
+				!!label
+				? label.replace("%s", i + 1)
+				: "★".repeat(i + 1)
+			) : label, data.special);
+			item._total = tiers;
+			break;
+
 		default:
 			total ++;
 			break;
@@ -683,14 +688,18 @@ function makeCheckbox(togglesParent = false) {
 	return input;
 }
 
-function makeCheckboxes(container, labels) {
+function makeCheckboxes(container, labels, special = []) {
 	const wrapper = document.createElement("div");
 	wrapper.classList.add("boxes");
 
-	labels.forEach(l => {
+	labels.forEach((l, i) => {
 		const label = document.createElement("label"),
 			span = document.createElement("span");
 		label.classList.add("tier");
+
+		// Mark levels when you get gifts
+		if (special.includes(i + 1)) label.classList.add("special");
+
 		span.innerText = l;
 		span.classList.add("text")
 		label.append(makeCheckbox(), span);
