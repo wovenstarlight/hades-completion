@@ -833,7 +833,7 @@ function updateGlobal() {
 
 	FRACTION.innerText = current;
 	BAR.value = current;
-	PERCENTAGE.innerText = `${(current / TOTAL).toFixed(2)}%`;
+	PERCENTAGE.innerText = `${((current / TOTAL) * 100).toFixed(2)}%`;
 
 	localStorage.setItem(STORAGEKEY, JSON.stringify(STATE).replaceAll("null", "0"));
 }
