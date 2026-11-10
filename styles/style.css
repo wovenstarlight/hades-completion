@@ -28,6 +28,8 @@
 	}
 }
 
+*, *::before, *::after { box-sizing: border-box }
+
 body {
 	margin: 0;
 	display: grid;
@@ -45,6 +47,8 @@ h1, h2, h3, h4, h5, h6 {
 	margin: 0;
 	font-weight: normal;
 }
+
+.label { font-variant: small-caps }
 /* #endregion Global */
 
 
@@ -69,6 +73,7 @@ h1, h2, h3, h4, h5, h6 {
 		text-align: center;
 		font-size: 1.1em;
 		color: var(--accent2);
+		margin-block-end: 2em;
 
 		img {
 			display: block;
@@ -92,6 +97,48 @@ h1, h2, h3, h4, h5, h6 {
 		max-width: 100%;
 		height: auto;
 	}
+
+	.progbar {
+		width: 100%;
+		.heading {
+			display: flex;
+			align-items: baseline;
+			font-variant: small-caps;
+		}
+		.key { flex-grow: 1 }
+		.fraction {
+			opacity: 0.75;
+			font-style: italic;
+			display: block;
+			text-align: end;
+		}
+	}
+}
+#percentage {
+	font-size: 1.4em;
+	color: var(--accent2);
+}
+#completion {
+	appearance: none;
+	display: block;
+	margin-block: 0.2em;
+	width: 100%;
+	height: 0.5em;
+	border: 0.1em solid var(--border);
+	border-radius: 0.5em;
+
+	&, &::-webkit-progress-bar {
+		background-color: var(--bg2);
+	}
+
+	&::-webkit-progress-value,
+	&::-moz-progress-bar {
+		background: linear-gradient(
+			to right,
+			light-dark(color-mix(var(--accent), var(--bg)), var(--accent)),
+			light-dark(var(--accent), var(--accent2))
+		);
+	}
 }
 
 #autosave { font-size: 0.8em }
@@ -104,6 +151,8 @@ h1, h2, h3, h4, h5, h6 {
 	display: flex;
 	flex-direction: column;
 	gap: 3em;
+
+	label { cursor: pointer }
 }
 /* #endregion Body */
 
@@ -148,6 +197,18 @@ h1, h2, h3, h4, h5, h6 {
 	}
 	&[open] summary { border-block-end: 0.1em solid var(--border) }
 }
+
+.progress {
+	opacity: 0.75;
+	font-size: 0.85rem;
+	font-style: italic;
+
+	*:has( > &) {
+		display: grid;
+		grid-template-columns: 1fr auto;
+		align-items: baseline;
+	}
+}
 /* #endregion Body section */
 
 
@@ -157,7 +218,8 @@ h1, h2, h3, h4, h5, h6 {
 	display: grid;
 	grid-template-columns: 1fr auto;
 	align-content: center;
-	gap: 0 0.5em;
+	align-items: center;
+	gap: 0.2em 0.5em;
 	min-height: 1.5em;
 	&:hover, &:focus-within { background-color: rgb(from var(--text) r g b / 0.05) }
 
@@ -166,9 +228,6 @@ h1, h2, h3, h4, h5, h6 {
 
 	p { margin: 0 }
 
-	.label {
-		font-variant: small-caps;
-	}
 	&.checked .label {
 		color: var(--accent2);
 		text-decoration: 0.1em solid color-mix(var(--accent), var(--accent2)) line-through;
@@ -213,7 +272,6 @@ label.item:has(.subtitle) input[type="checkbox"],
 	align-self: center;
 }
 
-label { cursor: pointer }
 .tier, input[type="number"] {
 	padding: 0.15em 0.5em;
 	border: thin solid var(--border);
@@ -221,15 +279,16 @@ label { cursor: pointer }
 
 	&:hover, &:focus-within { background-color: var(--bg2) }
 }
-.tier {	
+.tier {
+	display: flex;
+	align-items: center;
+	gap: 0.5ch;
+	line-height: 1;
+	height: 1.75em;
+
 	&.special { color: color-mix(currentColor, #6f3bd1) }
 
 	&:has(input:checked) { border-color: color-mix(var(--border), var(--accent2) 60%) }
-
-	input {
-		margin-inline-end: 0.7ch;
-		vertical-align: center;
-	}
 }
 input[type="number"] {
 	font: inherit;

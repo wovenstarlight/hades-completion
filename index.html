@@ -14,9 +14,17 @@
 		<span class="small">100% completion checklist</span>
 	</h1>
 
-	<!-- todo: total completion % -->
+	<label class="progbar">
+		<span class="heading">
+			<span class="key">Total Completion</span>
+			<span id="percentage">0%</span>
+		</span>
+		<progress id="completion" max="100" value="0">0%</progress>
+		<span class="fraction"><span id="gcurrent">0</span>/<span id="gtotal">0</span> tracked items</span>
+	</label>
 
 	<!-- todo: nav -->
+
 	<p id="autosave">Progress auto-saves on this device.</p>
 </header>
 
@@ -32,8 +40,8 @@ const DATA = [
 		groups: [
 			{ name: "Story", items: [
 				{ name: "Is There No Escape?", description: "Escape the Underworld for the first time" },
-				{ name: "Family Reunion", description: "Complete the Epilogue and reunite Persephone with the Olympians" },
 				{ name: "The Queen's Plan", description: "Bring Persephone to the Underworld and bond with the Olympians" },
+				{ name: "Family Reunion", description: "Complete the Epilogue and reunite Persephone with the Olympians" },
 			]},
 			{ name: "Relationships", items: [
 				{ name: "Distant Relatives", description: "Meet each of the Olympian gods" },
@@ -598,23 +606,41 @@ const DATA = [
 	},
 ]
 
-const PAGE = document.getElementById("sitemain");
-let total = 0, got = 0;
+const PAGE = document.getElementById("sitemain"),
+	PERCENTAGE = document.getElementById("percentage"),
+	BAR = document.getElementById("completion"),
+	FRACTION = document.getElementById("gcurrent"),
+	STATE = [], STORAGEKEY = "hadescompletionprogress";
 
+// Start calculating page data
+let inputCount = 0, TOTAL = 0;
+
+// Create page
 DATA.forEach(({ id, name, format, tiers, label, groups }) => {
-	let secTotal = 0, secGot = 0;
 	const section = document.createElement("section"),
 		heading = document.createElement("h2");
 	section.id = id;
 	section.classList.add("section");
 	heading.innerText = name;
 	section.append(heading);
+	section._total = 0;
 
 	groups.forEach((gData, gIndex) => addGroup({ format, tiers, label, ...gData}, gIndex, section));
 
+	makeProgressMarker(heading, section);
+	TOTAL += section._total;
 	PAGE.append(section);
 })
 
+
+// Set up global tracker
+delete (STATE[TOTAL - 1] = 0);	// hacky way to get to the proper length
+document.getElementById("gtotal").replaceWith(TOTAL);
+BAR.max = TOTAL;
+updateGlobal();
+
+
+// #region Rendering
 function addGroup({ name, format, tiers, items, label }, index, section) {
 	const group = document.createElement("details");
 	group.name = section.id;
@@ -625,12 +651,22 @@ function addGroup({ name, format, tiers, items, label }, index, section) {
 	heading.innerText = name;
 	group.append(heading);
 
-	items.forEach(iData => group.append(makeItem(iData, `row${total}`, iData.format ?? format, iData.tiers ?? tiers, iData.label ?? label)))
+	group._total = 0;
 
+	items.forEach(iData => {
+		const [element, iTotal] = makeItem(iData, `row${inputCount}`, iData.format ?? format, iData.tiers ?? tiers, iData.label ?? label);
+		group.append(element);
+		group._total += iTotal;
+	})
+
+	makeProgressMarker(heading, group);
 	section.append(group);
+	section._total += group._total;
 }
 
 function makeItem(data, id, format, tiers, label) {
+	let t = 0;
+
 	const item = document.createElement(["boolean", "number"].includes(format) ? "label" : "div");
 	item.classList.add("item");
 	item.id = id;
@@ -651,12 +687,12 @@ function makeItem(data, id, format, tiers, label) {
 		case "boolean":
 		default:
 			item.appendChild(makeCheckbox(true));
-			item._total = 1;
+			t = 1;
 			break;
 
 		case "getmax":
 			makeCheckboxes(item, label ?? ["Discovered", "Completed"]);
-			item._total = 2;
+			t = 2;
 			break;
 
 		case "upgrades":
@@ -665,26 +701,27 @@ function makeItem(data, id, format, tiers, label) {
 				? label.replace("%s", i + 1)
 				: "★".repeat(i + 1)
 			) : label, data.special);
-			item._total = tiers;
+			t = tiers ?? label.length;
 			break;
 
 		case "number":
 			item.append(makeNumber(tiers));
-			item._total = tiers;
+			t = tiers;
 			break;
 	}
 
-	return item;
+	return [item, t];
 }
 
 function makeCheckbox(togglesParent = false) {
 	const input = document.createElement("input");
-	input.id = `i${total++}`;
 	input.setAttribute("type", "checkbox");
+	input.id = `i${inputCount++}`;
 
 	if (togglesParent)
 		input.addEventListener("change", e => {
 			e.currentTarget.closest(".item").classList[e.currentTarget.checked ? "add" : "remove"]("checked");
+			updateProgress(input);
 		})
 
 	return input;
@@ -718,6 +755,8 @@ function makeCheckboxes(container, labels, special = []) {
 			}
 
 			toggleItem(label, e.currentTarget.checked);
+
+			updateProgress(label.firstElementChild);
 		})
 
 		wrapper.append(label);
@@ -746,10 +785,55 @@ function makeNumber(max) {
 			? "add"
 			: "remove"
 		]("checked");
+		updateProgress(input)
 	})
 
 	return input;
 }
+
+function makeProgressMarker(container, tracker) {
+	const wrapper = document.createElement("span");
+	wrapper.classList.add("progress");
+	const current = document.createElement("span");
+	tracker._progress = current;
+
+	wrapper.append(current, `/${tracker._total}`);
+
+	updateProgress(tracker.querySelector("input"));
+	container.append(wrapper);
+}
+// #endregion Rendering
+
+// #region Tracking
+function updateProgress(input) {
+	STATE[Number(input.id.slice(1))] = getValue(input);
+
+	[
+		input.closest(".dropdown"),
+		input.closest(".section"),
+	].filter(el => !!el).forEach(section => {
+		section._progress.innerText = Array
+			.from(section.querySelectorAll("input"))
+			.map(i => getValue(i))
+			.reduce((sum, curr) => sum + curr, 0);
+	});
+
+	updateGlobal();
+}
+
+function updateGlobal() {
+	if (!TOTAL) return;
+	const current = STATE.reduce((sum, curr) => !!curr ? sum + curr : sum, 0);
+
+	FRACTION.innerText = current;
+	BAR.value = current;
+	PERCENTAGE.innerText = `${(current / TOTAL).toFixed(2)}%`;
+}
+
+function getValue(input) {
+	return Number(input.type === "checkbox" ? input.checked : Math.floor(input.value));
+}
+// #endregion Tracking
 </script>
 
 </body>
