@@ -109,17 +109,68 @@ h1, h2, h3, h4, h5, h6 {
 	overflow: hidden;
 	display: flex;
 	flex-direction: column;
-	gap: 1em;
-	padding-block-end: 1em;
+	gap: 0.75em;
 	box-shadow: 0 0 0.25em 0.25em var(--bg2);
 	border: 0.1em solid var(--border);
-	
+
 	h2 {
 		background-color: var(--bg2);
 		padding: 0.3em 1vw 0.5em;
 		font-size: 1.3em;
 		font-variant: small-caps;
-		margin-block-end: 0.25em;
 	}
 }
+
+.dropdown {
+	margin-inline: 1em;
+	overflow: hidden;
+	border-radius: 1em;
+	border: 0.1em solid var(--border);
+	background-color: rgb(from var(--bg2) r g b / 0.2);
+
+	h2 + & { margin-block-start: 0.25em }
+	&:last-child { margin-block-end: 1em }
+
+	summary {
+		cursor: pointer;
+		font-variant: small-caps;
+		background-color: var(--bg2);
+		padding: 0.5em 0.75em;
+		color: var(--text-h);
+
+		&:hover, &:focus { color: color-mix(var(--text-h), var(--accent) 75%) }
+	}
+	&[open] summary { border-block-end: 0.1em solid var(--border) }
+}
 /* #endregion Body section */
+
+
+/* #region Body row */
+.item {
+	padding: 0.25em 1em;
+	display: grid;
+	grid-template-columns: 1fr auto;
+	align-content: center;
+	gap: 0 0.5em;
+	min-height: 1.5em;
+	&:hover, &:focus-within { background-color: rgb(from var(--text) r g b / 0.05) }
+
+	summary + & { margin-block-start: 0.5em }
+	&:last-child { margin-block-end: 0.5em }
+
+	p { margin: 0 }
+
+	.label {
+		font-variant: small-caps;
+		.checked {
+			color: var(--accent2);
+			text-decoration: 0.1em solid color-mix(var(--accent), var(--accent2)) line-through;
+		}
+	}
+
+	.subtitle {
+		grid-row: 2;
+		font-size: 0.8em;
+	}
+}
+/* #endregion Body row */

@@ -613,10 +613,45 @@ DATA.forEach(({ id, name, format, tiers, groups }) => {
 	heading.innerText = name;
 	section.append(heading);
 
-	// TODO: Fill out section
+	groups.forEach((gData, gIndex) => addGroup({ format, tiers, ...gData}, gIndex, section));
 
 	PAGE.append(section);
 })
+
+function addGroup({ name, format, tiers, items }, index, section) {
+	const group = document.createElement("details");
+	group.name = section.id;
+	group.id = `${section.id}-${index}`;
+	group.classList.add("dropdown");
+
+	const heading = document.createElement("summary");
+	heading.innerText = name;
+	group.append(heading);
+
+	items.forEach((iData, i) => group.append(makeItem(iData, `${group.id}-${i}`, format, tiers)))
+
+	section.append(group);
+}
+
+function makeItem({ name, description }, id, format, tiers) {
+	const item = document.createElement("div");
+	item.classList.add("item");
+	item.id = id;
+
+	const heading = document.createElement("p");
+	heading.classList.add("label");
+	heading.innerText = name;
+	item.append(heading);
+
+	if (!!description) {
+		const desc = document.createElement("p");
+		desc.classList.add("subtitle");
+		desc.innerText = description;
+		item.append(desc);
+	}
+
+	return item;
+}
 </script>
 
 </body>
