@@ -102,7 +102,7 @@ const DATA = [
 	{
 		id: "talents",
 		name: "Mirror of Night",
-		format: "getmax",
+		format: "getmax", label: ["Unlocked", "Maxed"],
 		groups: [{ name: "All Talents", items: [
 			{ name: "Shadow Presence"	}, { name: "Fiery Presence"		},
 			{ name: "Chthonic Vitality"	}, { name: "Dark Regeneration"	},
@@ -121,7 +121,7 @@ const DATA = [
 	{
 		id: "weapons",
 		name: "Infernal Arms",
-		format: "upgrades", tiers: 5,
+		format: "upgrades", tiers: 5, label: "Lv.%s",
 		groups: [
 			{ name: "Stygian Blade — Stygius", items: [
 				{ name: "Aspect of Zagreus" },
@@ -372,7 +372,7 @@ const DATA = [
 	{
 		id: "bonds",
 		name: "Bonds",
-		format: "varup",
+		format: "upgrades", label: "%s ♥",
 		groups: [
 			{ name: "Chthonic Gods", items: [
 				{ name: "Hades",		tiers: 5,	special: [2]	},
@@ -604,7 +604,7 @@ const DATA = [
 const PAGE = document.getElementById("sitemain");
 let total = 0, got = 0;
 
-DATA.forEach(({ id, name, format, tiers, groups }) => {
+DATA.forEach(({ id, name, format, tiers, label, groups }) => {
 	let secTotal = 0, secGot = 0;
 	const section = document.createElement("section"),
 		heading = document.createElement("h2");
@@ -613,12 +613,12 @@ DATA.forEach(({ id, name, format, tiers, groups }) => {
 	heading.innerText = name;
 	section.append(heading);
 
-	groups.forEach((gData, gIndex) => addGroup({ format, tiers, ...gData}, gIndex, section));
+	groups.forEach((gData, gIndex) => addGroup({ format, tiers, label, ...gData}, gIndex, section));
 
 	PAGE.append(section);
 })
 
-function addGroup({ name, format, tiers, items }, index, section) {
+function addGroup({ name, format, tiers, items, label }, index, section) {
 	const group = document.createElement("details");
 	group.name = section.id;
 	group.id = `${section.id}-${index}`;
@@ -628,25 +628,26 @@ function addGroup({ name, format, tiers, items }, index, section) {
 	heading.innerText = name;
 	group.append(heading);
 
-	items.forEach(iData => group.append(makeItem(iData, `row${total}`, format, tiers)))
+	items.forEach(iData => group.append(makeItem(iData, `row${total}`, format, tiers, label)))
 
 	section.append(group);
 }
 
-function makeItem({ name, description }, id, format, tiers) {
+function makeItem(data, id, format, tiers, label) {
 	const item = document.createElement(format === "boolean" ? "label" : "div");
 	item.classList.add("item");
 	item.id = id;
+	if (!!data.tiers) tiers = data.tiers;
 
 	const heading = document.createElement("p");
 	heading.classList.add("label");
-	heading.innerText = name;
+	heading.innerText = data.name;
 	item.append(heading);
 
-	if (!!description) {
+	if (!!data.description) {
 		const desc = document.createElement("p");
 		desc.classList.add("subtitle");
-		desc.innerText = description;
+		desc.innerText = data.description;
 		item.append(desc);
 	}
 
@@ -657,7 +658,7 @@ function makeItem({ name, description }, id, format, tiers) {
 			break;
 
 		case "getmax":
-			makeCheckboxes(item, ["Discovered", "Completed"]);
+			makeCheckboxes(item, label ?? ["Discovered", "Completed"]);
 			item._total = 2;
 			break;
 
