@@ -322,7 +322,9 @@ input[type="number"] {
 	display: flex;
 	flex-flow: row wrap;
 	gap: 0.3em;
+}
 
+input[type="number"], .boxes {
 	.item:has(.subtitle) & { grid-row: 1 / span 2 }
 }
 /* #region Inputs */
