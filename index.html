@@ -605,7 +605,17 @@ const PAGE = document.getElementById("sitemain");
 let total = 0, got = 0;
 
 DATA.forEach(({ id, name, format, tiers, groups }) => {
-	// TODO
+	let secTotal = 0, secGot = 0;
+	const section = document.createElement("section"),
+		heading = document.createElement("h2");
+	section.id = id;
+	section.classList.add("section");
+	heading.innerText = name;
+	section.append(heading);
+
+	// TODO: Fill out section
+
+	PAGE.append(section);
 })
 </script>
 
