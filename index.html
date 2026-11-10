@@ -665,21 +665,19 @@ function addGroup({ name, format, tiers, items, label }, index, section) {
 	heading.innerText = name;
 	group.append(heading);
 
-	const button = document.createElement("button");
-	button.classList.add("markall");
-	button.type = "button";
-	button.innerText = "Mark all as complete";
-	button.addEventListener("click", () => {
-		group.querySelectorAll(".item").forEach(item => {
-			const i = Array.from(item.querySelectorAll("input")).at(-1);
-
-			if (i.type === "checkbox") i.checked = true;	// will cascade to all prior boxes
-			else i.value = i.max;	// no cascade needed
-
-			i.dispatchEvent(new Event("change"));
-		})
-	})
-	group.append(button);
+	const btns = document.createElement("div"),
+		btn1 = document.createElement("button"),
+		btn2 = document.createElement("button");
+	btns.classList.add("markall");
+	btn1.type = btn2.type = "button";
+	btn1.classList.add("yes");
+	btn2.classList.add("no");
+	btn1.innerText = "Complete All";
+	btn2.innerText = "Reset All";
+	btn1.addEventListener("click", () => setAllInputs(group, true))
+	btn2.addEventListener("click", () => setAllInputs(group, false))
+	btns.append(btn1, btn2);
+	group.append(btns);
 
 	group._total = 0;
 
@@ -900,18 +898,22 @@ RESET.addEventListener("click", () => {
 document.getElementById("reset2").addEventListener("click", () => {
 	clearTimeout(CONFIRM_RESET._revert);
 
-	PAGE.querySelectorAll(".item").forEach(item => {
-		const i = item.querySelector("input");
-
-		if (i.type === "checkbox") i.checked = false;	// will cascade to all prior boxes
-		else i.value = i.min;	// no cascade needed
-
-		i.dispatchEvent(new Event("change"));
-	});
+	setAllInputs(PAGE, true);
 
 	RESET.disabled = false;
 	CONFIRM_RESET.disabled = true;
 })
+
+function setAllInputs(section, enable = false) {
+	section.querySelectorAll(".item").forEach(item => {
+		const i = enable ? Array.from(item.querySelectorAll("input")).at(-1) : item.querySelector("input");
+
+		if (i.type === "checkbox") i.checked = enable;	// will cascade to all neighboring boxes
+		else i.value = enable ? i.max : i.min;	// no cascade needed
+
+		i.dispatchEvent(new Event("change"));
+	})
+}
 // #endregion Tracking
 </script>
 
