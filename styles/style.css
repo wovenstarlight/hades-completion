@@ -242,6 +242,11 @@ button {
 	h2 + & { margin-block-start: 0.25em }
 	&:last-child { margin-block-end: 1em }
 
+	&:not(:has(
+		input[type="checkbox"]:not(:checked),
+		.item:not(.checked) input[type="number"]
+	)) { border-color: color-mix(var(--border), var(--accent2)) }
+
 	summary {
 		cursor: pointer;
 		font-variant: small-caps;
@@ -259,7 +264,7 @@ button {
 	font-size: 0.85rem;
 	font-style: italic;
 
-	*:has( > &) {
+	:is(h2, a, summary):has( > &) {
 		display: grid;
 		grid-template-columns: 1fr auto;
 		align-items: baseline;
