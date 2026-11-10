@@ -234,8 +234,22 @@ h1, h2, h3, h4, h5, h6 {
 
 	p { margin: 0 }
 
+	.label.hidden {
+		width: fit-content;
+		text-shadow: 0 0 0.5em var(--text);
+		color: transparent;
+		transition: 0.1s ease;
+		transition-property: color, text-shadow;
+		&:has(~ .boxes input:checked),
+		&:hover, &:focus {
+			color: var(--text);
+			text-shadow: none;
+			transition-duration: 0.5s;
+		}
+	}
+
 	&.checked .label {
-		color: var(--accent2);
+		color: var(--accent2) !important;
 		text-decoration: 0.1em solid color-mix(var(--accent), var(--accent2)) line-through;
 	}
 

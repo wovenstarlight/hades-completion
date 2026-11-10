@@ -135,37 +135,37 @@ const DATA = [
 				{ name: "Aspect of Zagreus" },
 				{ name: "Aspect of Nemesis" },
 				{ name: "Aspect of Poseidon" },
-				{ name: "Aspect of Arthur", hidden: true },
+				{ name: "Aspect of Arthur", description: "Hidden Aspect", hidden: true },
 			]},
 			{ name: "Eternal Spear — Varatha", items: [
 				{ name: "Aspect of Zagreus" },
 				{ name: "Aspect of Achilles" },
 				{ name: "Aspect of Hades" },
-				{ name: "Aspect of Guan Yu", hidden: true },
+				{ name: "Aspect of Guan Yu", description: "Hidden Aspect", hidden: true },
 			]},
 			{ name: "Shield of Chaos — Aegis", items: [
 				{ name: "Aspect of Zagreus" },
 				{ name: "Aspect of Chaos" },
 				{ name: "Aspect of Zeus" },
-				{ name: "Aspect of Beowulf", hidden: true },
+				{ name: "Aspect of Beowulf", description: "Hidden Aspect", hidden: true },
 			]},
 			{ name: "Heart-Seeking Bow — Coronacht", items: [
 				{ name: "Aspect of Zagreus" },
 				{ name: "Aspect of Chiron" },
 				{ name: "Aspect of Hera" },
-				{ name: "Aspect of Rama", hidden: true },
+				{ name: "Aspect of Rama", description: "Hidden Aspect", hidden: true },
 			]},
 			{ name: "Twin Fists — Malphon", items: [
 				{ name: "Aspect of Zagreus" },
 				{ name: "Aspect of Talos" },
 				{ name: "Aspect of Demeter" },
-				{ name: "Aspect of Gilgamesh", hidden: true },
+				{ name: "Aspect of Gilgamesh", description: "Hidden Aspect", hidden: true },
 			]},
 			{ name: "Adamant Rail — Exagryph", items: [
 				{ name: "Aspect of Zagreus" },
 				{ name: "Aspect of Eris" },
 				{ name: "Aspect of Hestia" },
-				{ name: "Aspect of Lucifer", hidden: true },
+				{ name: "Aspect of Lucifer", description: "Hidden Aspect", hidden: true },
 			]},
 		]
 	},
@@ -261,7 +261,7 @@ const DATA = [
 				{ name: "Cerberus",		tiers: 9,	special: [1]	},
 				{ name: "Dusa",			tiers: 10,	special: [1,7]	},
 				{ name: "Skelly",		tiers: 9,	special: [1,7]	},
-				{ name: "Persephone",	tiers: 9,	special: [1]	},
+				{ name: "Persephone",	tiers: 9,	special: [1],	hidden: true },
 			]},
 		],
 	},
@@ -304,7 +304,7 @@ const DATA = [
 				{ name: "Cerberus" },
 				{ name: "Dusa" },
 				{ name: "Skelly" },
-				{ name: "Persephone" },
+				{ name: "Persephone", hidden: true },
 			]},
 			{ name: "The Underworld", items: [
 				{ name: "House of Hades" },
@@ -678,6 +678,7 @@ function makeItem(data, id, format, tiers, label) {
 	const heading = document.createElement("p");
 	heading.classList.add("label");
 	heading.innerText = data.name;
+	if (data.hidden) heading.classList.add("hidden");
 	item.append(heading);
 
 	if (!!data.description) {
