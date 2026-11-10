@@ -239,6 +239,13 @@ h1, h2, h3, h4, h5, h6 {
 		opacity: 0.8;
 	}
 }
+@media (max-width: 600px) {
+	.item:not(label) {
+		display: flex;
+		flex-direction: column;
+		align-items: start;
+	}
+}
 
 #talents .label {
 	background-image: linear-gradient(var(--text) 54%, color-mix(var(--text) var(--mixstrength, 80%), var(--mycolor)) 58%);
@@ -266,8 +273,7 @@ input[type="checkbox"] {
 	label.item & { font-size: 1.2em }
 }
 
-label.item:has(.subtitle) input[type="checkbox"],
-.item:has(.subtitle) .boxes {
+label.item:has(.subtitle) input[type="checkbox"] {
 	grid-row: 1 / span 2;
 	align-self: center;
 }
@@ -302,5 +308,7 @@ input[type="number"] {
 	display: flex;
 	flex-flow: row wrap;
 	gap: 0.3em;
+
+	.item:has(.subtitle) & { grid-row: 1 / span 2 }
 }
 /* #region Inputs */
