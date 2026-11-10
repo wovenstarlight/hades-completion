@@ -135,6 +135,25 @@ button {
 			text-align: end;
 		}
 	}
+	
+	.reset { margin-block: 1em }
+	#reset2 {
+		color: light-dark(#700, #f00);
+		font-weight: bold;
+		position: relative;
+		&::after {
+			content: "(Immediate & Irreversible)";
+			position: absolute;
+			color: var(--text);
+			font-weight: normal;
+			font-size: 0.8em;
+			inset-block-start: 100%;
+			inset-inline-start: 0;
+			width: 100%;
+			text-align: center;
+			padding-block-start: 0.1em;
+		}
+	}
 }
 #percentage {
 	font-size: 1.4em;
