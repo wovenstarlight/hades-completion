@@ -705,15 +705,16 @@ function makeCheckboxes(container, labels, special = []) {
 		label.append(makeCheckbox(), span);
 
 		label.firstElementChild.addEventListener("change", e => {
-			// Enabled!
-			let loopL = label;
-			if (e.target.checked)
-				while (!!(loopL = loopL.previousElementSibling))
-					loopL.firstElementChild.checked = true;
-			else while (!!(loopL = loopL.nextElementSibling)) {
-				loopL.firstElementChild.checked = false;
-				toggleItem(loopL, false);
+			let sibling;
+			if (!!(sibling = label.previousElementSibling) && e.currentTarget.checked) {
+				sibling.firstElementChild.checked = true;
+				sibling.firstElementChild.dispatchEvent(new Event("change"));
 			}
+			else if (!!(sibling = label.nextElementSibling) && !e.currentTarget.checked) {
+				sibling.firstElementChild.checked = false;
+				sibling.firstElementChild.dispatchEvent(new Event("change"));
+			}
+
 			toggleItem(label, e.currentTarget.checked);
 		})
 
