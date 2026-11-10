@@ -19,11 +19,11 @@
 			<span class="key">Total Completion</span>
 			<span id="percentage">0%</span>
 		</span>
-		<progress id="completion" max="100" value="0">0%</progress>
+		<progress id="completion" max="100" value="0"></progress>
 		<span class="fraction"><span id="gcurrent">0</span>/<span id="gtotal">0</span> tracked items</span>
 	</label>
 
-	<!-- todo: nav -->
+	<nav id="sitenav"></nav>
 
 	<p id="autosave">Progress auto-saves on this device.</p>
 </header>
@@ -606,6 +606,7 @@ const DATA = [
 ]
 
 const PAGE = document.getElementById("sitemain"),
+	TOC = document.getElementById("sitenav"),
 	PERCENTAGE = document.getElementById("percentage"),
 	BAR = document.getElementById("completion"),
 	FRACTION = document.getElementById("gcurrent"),
@@ -631,7 +632,13 @@ DATA.forEach(({ id, name, format, tiers, label, groups }) => {
 
 	groups.forEach((gData, gIndex) => addGroup({ format, tiers, label, ...gData}, gIndex, section));
 
-	makeProgressMarker(heading, section);
+	// Add TOC link
+	const link = document.createElement("a");
+	link.href = `#${id}`;
+	link.innerText = { prophecies: "Prophecies", keepsakes: "Keepsakes" }[id] ?? name;
+	TOC.append(link);
+
+	makeProgressMarker(section, heading, link);
 	TOTAL += section._total;
 	PAGE.append(section);
 })
@@ -663,7 +670,7 @@ function addGroup({ name, format, tiers, items, label }, index, section) {
 		group._total += iTotal;
 	})
 
-	makeProgressMarker(heading, group);
+	makeProgressMarker(group, heading);
 	section.append(group);
 	section._total += group._total;
 }
@@ -803,18 +810,24 @@ function makeNumber(max) {
 	return input;
 }
 
-function makeProgressMarker(container, tracker) {
+function makeProgressMarker(tracked, ...containers) {
+	tracked._progress = [];
+
 	const wrapper = document.createElement("span");
 	wrapper.classList.add("progress");
 	const current = document.createElement("span");
-	tracker._progress = current;
+	wrapper.append(current, `/${tracked._total}`);
 
-	wrapper.append(current, `/${tracker._total}`);
+	containers.forEach((el, i) => {
+		el.append(i < 1 ? wrapper : wrapper.cloneNode(true))
+		tracked._progress.push(el.lastElementChild.firstElementChild);
+	});
 
-	updateProgress(tracker.querySelector("input"));
-	container.append(wrapper);
+	updateProgress(tracked.querySelector("input"));
 }
 // #endregion Rendering
+
+
 
 // #region Tracking
 function updateProgress(input) {
@@ -824,10 +837,15 @@ function updateProgress(input) {
 		input.closest(".dropdown"),
 		input.closest(".section"),
 	].filter(el => !!el).forEach(section => {
-		section._progress.innerText = Array
+		const sum = Array
 			.from(section.querySelectorAll("input"))
 			.map(i => getValue(i))
 			.reduce((sum, curr) => sum + curr, 0);
+		section._progress.forEach(el => {
+			el.innerText = sum;
+
+			el.closest("a")?.setAttribute("style", `--completion: ${((sum / section._total) * 100).toFixed(2)}%`);
+		})
 	});
 
 	updateGlobal();

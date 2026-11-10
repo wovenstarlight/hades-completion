@@ -49,6 +49,23 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .label { font-variant: small-caps }
+
+button {
+	cursor: pointer;
+	background-color: var(--bg2);
+	border: 0.1em solid var(--border);
+	border-radius: 0.25em;
+	font: inherit;
+	padding: 0.5em 1em;
+	font-variant: small-caps;
+	
+	&:hover, &:focus {
+		background-color: color-mix(var(--bg), var(--bg2) 75%);
+		color: light-dark(#700, #f00);
+	}
+	
+	&[disabled] { display: none }
+}
 /* #endregion Global */
 
 
@@ -143,6 +160,39 @@ h1, h2, h3, h4, h5, h6 {
 			light-dark(color-mix(var(--accent), var(--bg)), var(--accent)),
 			light-dark(var(--accent), var(--accent2))
 		);
+	}
+}
+
+#sitenav {
+	flex-grow: 1;
+	overflow-y: scroll;
+	justify-content: space-evenly;
+	width: 100%;
+	display: flex;
+	flex-direction: column;
+	background-color: light-dark(rgb(from var(--bg2) r g b / 0.25), var(--bg2));
+	border: 0.1em solid var(--border);
+	
+	a {
+		color: var(--accent2);
+		padding: 0.5em 1em;
+		text-decoration: none;
+		position: relative;
+		
+		&::after {
+			content: "";
+			position: absolute;
+			inset-block-end: 0;
+			height: 0.25em;
+			width: 100%;
+			--mycolor: var(--accent);
+			background-color: rgb(from var(--accent) r g b / 0.1);
+			background-image: linear-gradient(rgb(from var(--mycolor) r g b / 0.5));
+			background-size: var(--completion, 0) 100%;
+			background-repeat: no-repeat;
+		}
+
+		&:is(:hover, :focus)::after { --mycolor: var(--accent2) }
 	}
 }
 
