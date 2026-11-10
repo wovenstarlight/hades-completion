@@ -173,4 +173,17 @@ h1, h2, h3, h4, h5, h6 {
 		font-size: 0.8em;
 	}
 }
+
+#talents .label {
+	background-image: linear-gradient(var(--text) 54%, color-mix(var(--text) var(--mixstrength, 80%), var(--mycolor)) 58%);
+	background-clip: text;
+	color: transparent;
+	text-shadow: 1px 1px rgb(from var(--mycolor) r g b / 0.25);
+
+	@media (prefers-color-scheme: dark) {
+		--mixstrength: 50%;
+	}
+}
+#talents .item:nth-child(even) { --mycolor: #f14d39 }
+#talents .item:nth-child(odd) { --mycolor: #bdf31a }
 /* #endregion Body row */
