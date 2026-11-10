@@ -177,6 +177,7 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .dropdown {
+	container-type: inline-size;
 	margin-inline: 1em;
 	overflow: hidden;
 	border-radius: 1em;
@@ -259,6 +260,14 @@ h1, h2, h3, h4, h5, h6 {
 }
 #talents .item:nth-child(even) { --mycolor: #f14d39 }
 #talents .item:nth-child(odd) { --mycolor: #bdf31a }
+
+@container (min-width: 825px) {
+	#talents .item {
+		width: 50%;
+		display: inline-grid;
+	}
+	#bonds label::after { content: "♥" }
+}
 /* #endregion Body row */
 
 
