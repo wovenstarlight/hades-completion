@@ -168,15 +168,16 @@ h1, h2, h3, h4, h5, h6 {
 
 	.label {
 		font-variant: small-caps;
-		.checked {
-			color: var(--accent2);
-			text-decoration: 0.1em solid color-mix(var(--accent), var(--accent2)) line-through;
-		}
+	}
+	&.checked .label {
+		color: var(--accent2);
+		text-decoration: 0.1em solid color-mix(var(--accent), var(--accent2)) line-through;
 	}
 
 	.subtitle {
 		grid-row: 2;
 		font-size: 0.8em;
+		opacity: 0.8;
 	}
 }
 
@@ -193,3 +194,42 @@ h1, h2, h3, h4, h5, h6 {
 #talents .item:nth-child(even) { --mycolor: #f14d39 }
 #talents .item:nth-child(odd) { --mycolor: #bdf31a }
 /* #endregion Body row */
+
+
+/* #region Checkboxes */
+input[type="checkbox"] {
+	--size: 1em;
+	width: var(--size);
+	height: var(--size);
+	accent-color: var(--accent2);
+	margin: 0;
+
+	label.item & { font-size: 1.2em }
+}
+
+label.item:has(.subtitle) input[type="checkbox"],
+.item:has(.subtitle) .boxes {
+	grid-row: 1 / span 2;
+	align-self: center;
+}
+
+label { cursor: pointer }
+.tier {
+	padding: 0.15em 0.5em;
+	border: thin solid var(--border);
+	border-radius: 0.25em;
+
+	&:hover, &:focus-within { background-color: var(--bg2) }
+
+	input {
+		margin-inline-end: 0.7ch;
+		vertical-align: center;
+	}
+}
+
+.boxes {
+	display: flex;
+	flex-flow: row wrap;
+	gap: 0.3em;
+}
+/* #region Checkboxes */

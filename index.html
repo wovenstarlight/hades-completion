@@ -628,13 +628,13 @@ function addGroup({ name, format, tiers, items }, index, section) {
 	heading.innerText = name;
 	group.append(heading);
 
-	items.forEach((iData, i) => group.append(makeItem(iData, `${group.id}-${i}`, format, tiers)))
+	items.forEach(iData => group.append(makeItem(iData, `row${total}`, format, tiers)))
 
 	section.append(group);
 }
 
 function makeItem({ name, description }, id, format, tiers) {
-	const item = document.createElement("div");
+	const item = document.createElement(format === "boolean" ? "label" : "div");
 	item.classList.add("item");
 	item.id = id;
 
@@ -650,7 +650,53 @@ function makeItem({ name, description }, id, format, tiers) {
 		item.append(desc);
 	}
 
+	switch (format) {
+		case "boolean":
+			item.appendChild(makeCheckbox());
+			item._total = 1;
+			break;
+
+		case "getmax":
+			makeCheckboxes(item, ["Discovered", "Completed"]);
+			item._total = 2;
+			break;
+
+		default:
+			total ++;
+			break;
+	}
+
 	return item;
+}
+
+function makeCheckbox() {
+	const input = document.createElement("input");
+	input.id = `i${total++}`;
+	input.setAttribute("type", "checkbox");
+	return input;
+}
+
+function makeCheckboxes(container, labels) {
+	const wrapper = document.createElement("div");
+	wrapper.classList.add("boxes");
+
+	labels.forEach(l => {
+		const label = document.createElement("label"),
+			span = document.createElement("span");
+		label.classList.add("tier");
+		span.innerText = l;
+		span.classList.add("text")
+		label.append(makeCheckbox(), span);
+
+		wrapper.append(label);
+	})
+
+	container.append(wrapper);
+}
+
+function toggleItem(label, completed) {
+	if (!label.nextElementSibling)
+		label.closest(".item").classList[completed ? "add" : "remove"]("checked");
 }
 </script>
 
