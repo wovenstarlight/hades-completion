@@ -631,7 +631,7 @@ function addGroup({ name, format, tiers, items, label }, index, section) {
 }
 
 function makeItem(data, id, format, tiers, label) {
-	const item = document.createElement(format === "boolean" ? "label" : "div");
+	const item = document.createElement(["boolean", "number"].includes(format) ? "label" : "div");
 	item.classList.add("item");
 	item.id = id;
 
@@ -649,6 +649,7 @@ function makeItem(data, id, format, tiers, label) {
 
 	switch (format) {
 		case "boolean":
+		default:
 			item.appendChild(makeCheckbox(true));
 			item._total = 1;
 			break;
@@ -667,8 +668,9 @@ function makeItem(data, id, format, tiers, label) {
 			item._total = tiers;
 			break;
 
-		default:
-			total ++;
+		case "number":
+			item.append(makeNumber(tiers));
+			item._total = tiers;
 			break;
 	}
 
@@ -727,6 +729,26 @@ function makeCheckboxes(container, labels, special = []) {
 function toggleItem(label, completed) {
 	if (!label.nextElementSibling)
 		label.closest(".item").classList[completed ? "add" : "remove"]("checked");
+}
+
+function makeNumber(max) {
+	const input = document.createElement("input");
+	input.type = "number";
+	input.id = `i${inputCount++}`;
+	input.value = 0;
+	input.min = 0;
+	input.max = max;
+	input.step = 1;
+
+	input.addEventListener("change", e => {
+		e.currentTarget.closest(".item").classList[
+			parseInt(e.currentTarget.value) === max
+			? "add"
+			: "remove"
+		]("checked");
+	})
+
+	return input;
 }
 </script>
 

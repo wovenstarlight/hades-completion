@@ -196,7 +196,7 @@ h1, h2, h3, h4, h5, h6 {
 /* #endregion Body row */
 
 
-/* #region Checkboxes */
+/* #region Inputs */
 input[type="checkbox"] {
 	--size: 1em;
 	width: var(--size);
@@ -214,17 +214,29 @@ label.item:has(.subtitle) input[type="checkbox"],
 }
 
 label { cursor: pointer }
-.tier {
+.tier, input[type="number"] {
 	padding: 0.15em 0.5em;
 	border: thin solid var(--border);
 	border-radius: 0.25em;
 
 	&:hover, &:focus-within { background-color: var(--bg2) }
+}
+.tier {	
+	&.special { color: color-mix(currentColor, #6f3bd1) }
+
+	&:has(input:checked) { border-color: color-mix(var(--border), var(--accent2) 60%) }
 
 	input {
 		margin-inline-end: 0.7ch;
 		vertical-align: center;
 	}
+}
+input[type="number"] {
+	font: inherit;
+	color: inherit;
+	background-color: rgb(from var(--bg2) r g b / 0.5);
+	accent-color: var(--accent2);
+	text-align: end;
 }
 
 .boxes {
@@ -232,4 +244,4 @@ label { cursor: pointer }
 	flex-flow: row wrap;
 	gap: 0.3em;
 }
-/* #region Checkboxes */
+/* #region Inputs */
