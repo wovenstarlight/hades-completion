@@ -59,10 +59,12 @@ h1, h2, h3, h4, h5, h6 {
 	align-items: center;
 	background-color: var(--bg);
 	box-shadow: 0 0 0.5em 0.5em var(--bg2);
-	padding: 1em;
+	padding: 1em 1em 0.25em;
+	position: sticky;
+	top: -11em;
+	z-index: 1;
 
 	@media (min-width: 768px) {
-		position: sticky;
 		top: 0;
 		height: 100vh;
 	}
@@ -99,6 +101,9 @@ h1, h2, h3, h4, h5, h6 {
 	}
 
 	.progbar {
+		background-color: inherit;
+		position: sticky;
+		top: 0.4em;
 		width: 100%;
 		.heading {
 			display: flex;
