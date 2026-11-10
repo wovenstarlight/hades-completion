@@ -653,7 +653,7 @@ function makeItem(data, id, format, tiers, label) {
 
 	switch (format) {
 		case "boolean":
-			item.appendChild(makeCheckbox());
+			item.appendChild(makeCheckbox(true));
 			item._total = 1;
 			break;
 
@@ -670,10 +670,16 @@ function makeItem(data, id, format, tiers, label) {
 	return item;
 }
 
-function makeCheckbox() {
+function makeCheckbox(togglesParent = false) {
 	const input = document.createElement("input");
 	input.id = `i${total++}`;
 	input.setAttribute("type", "checkbox");
+
+	if (togglesParent)
+		input.addEventListener("change", e => {
+			e.currentTarget.closest(".item").classList[e.currentTarget.checked ? "add" : "remove"]("checked");
+		})
+
 	return input;
 }
 
@@ -688,6 +694,19 @@ function makeCheckboxes(container, labels) {
 		span.innerText = l;
 		span.classList.add("text")
 		label.append(makeCheckbox(), span);
+
+		label.firstElementChild.addEventListener("change", e => {
+			// Enabled!
+			let loopL = label;
+			if (e.target.checked)
+				while (!!(loopL = loopL.previousElementSibling))
+					loopL.firstElementChild.checked = true;
+			else while (!!(loopL = loopL.nextElementSibling)) {
+				loopL.firstElementChild.checked = false;
+				toggleItem(loopL, false);
+			}
+			toggleItem(label, e.currentTarget.checked);
+		})
 
 		wrapper.append(label);
 	})
