@@ -16,7 +16,7 @@
 		--accent2: #6F4F00;
 	}
 
-	--font: system-ui, "Segoe UI", Roboto, sans-serif;
+	--font: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
 
 	font: 18px var(--font);
 	color-scheme: light dark;
