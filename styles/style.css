@@ -16,7 +16,8 @@
 		--accent2: #6F4F00;
 	}
 
-	--font: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+	--font: "Alegreya Sans", Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+	--font-sc: "Alegreya Sans SC", var(--font);
 
 	font: 18px var(--font);
 	color-scheme: light dark;
@@ -48,7 +49,7 @@ h1, h2, h3, h4, h5, h6 {
 	font-weight: normal;
 }
 
-.label { font-variant: small-caps }
+.label { font-family: var(--font-sc) }
 
 button {
 	cursor: pointer;
@@ -57,7 +58,7 @@ button {
 	border-radius: 0.25em;
 	font: inherit;
 	padding: 0.5em 1em;
-	font-variant: small-caps;
+	font-family: var(--font-sc);
 
 	&:hover, &:focus {
 		background-color: color-mix(var(--bg), var(--bg2) 75%);
@@ -127,7 +128,7 @@ button {
 		.heading {
 			display: flex;
 			align-items: baseline;
-			font-variant: small-caps;
+			font-family: var(--font-sc);
 		}
 		.key { flex-grow: 1 }
 		.fraction {
@@ -254,7 +255,7 @@ button {
 		background-color: var(--bg2);
 		padding: 0.3em max(1vw, 0.6em) 0.5em;
 		font-size: 1.3em;
-		font-variant: small-caps;
+		font-family: var(--font-sc);
 	}
 }
 
@@ -276,7 +277,7 @@ button {
 
 	summary {
 		cursor: pointer;
-		font-variant: small-caps;
+		font-family: var(--font-sc);
 		background-color: var(--bg2);
 		padding: 0.5em 0.75em;
 		color: var(--text-h);
