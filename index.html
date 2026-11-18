@@ -40,7 +40,7 @@
 
 <script>
 const DATA = [
-	{
+	{	// Fated List of Minor Prophecies
 		id: "prophecies",
 		name: "Fated List of Minor Prophecies",
 		format: "boolean",
@@ -58,8 +58,8 @@ const DATA = [
 				{ name: "The Reluctant Musician", description: "Release Orpheus from Tartarus" },
 				{ name: "Musician and Muse", description: "Reunite Orpheus and Eurydice" },
 				{ name: "Divided by Death", description: "Reunite Achilles and Patroclus" },
-				{ name: "A Place of Revelry", description: "Help Dusa by purchasing multiple work orders" },
-				{ name: "Eternal Rest", description: "Defeat Skelly with the Zagreus Aspect of Stygius at Lv.5" },
+				{ name: "A Place of Revelry", description: "Help Dusa by renovating the lounge" },
+				{ name: "Eternal Rest", description: "Defeat Skelly with the Zagreus Aspect of Stygius at Lv. MAX" },
 			]},
 			{ name: "Boons & Banes", items: [
 				{ name: "God of the Heavens", description: "Obtain every Boon of Zeus" },
@@ -102,7 +102,7 @@ const DATA = [
 				{ name: "Sea-God's Spite", description: "Defeat Theseus under Extreme Measures, then speak to Poseidon" },
 				{ name: "Denizens of the Deep", description: "Catch 25 fish (including 1 Rare), then speak to Poseidon" },
 				{ name: "War-God's Bloodlust", description: "Defeat 10,000 enemies, then speak to Ares" },
-				{ name: "A Friendly Wager", description: "Defeat Charon twice, then speak to Hermes" },
+				{ name: "A Friendly Wager", description: "Defeat Charon in two successive battles, then speak to Hermes" },
 				{ name: "The Useless Trinket", description: "Earn the first of Skelly's prizes" },
 			]},
 			{ name: "Progression & Abilities", items: [
@@ -114,7 +114,7 @@ const DATA = [
 			]},
 		]
 	},
-	{
+	{	// Mirror of Night
 		id: "talents",
 		name: "Mirror of Night",
 		format: "getmax", label: ["Unlocked", "Maxed"],
@@ -133,7 +133,7 @@ const DATA = [
 			{ name: "Fated Authority"	}, { name: "Fated Persuasion"	},
 		]}]
 	},
-	{
+	{	// Infernal Arms
 		id: "weapons",
 		name: "Infernal Arms",
 		format: "upgrades", tiers: 5, label: "Lv.%s",
@@ -176,7 +176,7 @@ const DATA = [
 			]},
 		]
 	},
-	{
+	{	// Keepsakes & Companions
 		id: "keepsakes",
 		name: "Keepsakes & Companions",
 		format: "variable",
@@ -211,14 +211,14 @@ const DATA = [
 			{ name: "All Companions", format: "upgrades", tiers: 5, items: [
 				{ name: "Battie",	description: "Megaera"	},
 				{ name: "Mort",		description: "Thanatos"	},
-				{ name: "Rib",		description: "Skelly"	},
 				{ name: "Shady",	description: "Sisyphus"	},
+				{ name: "Rib",		description: "Skelly"	},
 				{ name: "Fidi",		description: "Dusa"		},
 				{ name: "Antos",	description: "Achilles"	},
 			]},
 		],
 	},
-	{
+	{	// Pact of Punishment
 		id: "heat",
 		name: "Pact of Punishment",
 		format: "variable",
@@ -234,7 +234,7 @@ const DATA = [
 			]},
 		],
 	},
-	{
+	{	// Bonds
 		id: "bonds",
 		name: "Bonds",
 		format: "upgrades", label: "%s",
@@ -272,15 +272,15 @@ const DATA = [
 			]},
 		],
 	},
-	{
+	{	// Codex
 		id: "codex",
 		name: "Codex",
 		format: "getmax",
 		groups: [
 			{ name: "Chthonic Gods", items: [
 				{ name: "Hades" },
-				{ name: "Zagreus" },
 				{ name: "Nyx" },
+				{ name: "Zagreus" },
 				{ name: "Charon" },
 				{ name: "Hypnos" },
 				{ name: "Thanatos" },
@@ -418,7 +418,7 @@ const DATA = [
 			]},
 		],
 	},
-	{
+	{	// House Contractor
 		id: "contractor",
 		name: "House Contractor",
 		format: "boolean",
