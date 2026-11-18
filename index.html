@@ -648,6 +648,9 @@ DATA.forEach(({ id, name, format, tiers, label, groups }) => {
 	makeProgressMarker(section, heading, link);
 	TOTAL += section._total;
 	PAGE.append(section);
+
+	if (id === "heat")
+		window.heatMilestones = Array.from(section.querySelectorAll(".item:last-child input"));
 })
 
 
@@ -825,7 +828,21 @@ function makeNumber(max) {
 			? "add"
 			: "remove"
 		]("checked");
-		updateProgress(input)
+		updateProgress(input);
+
+		let eight = false,
+			sixteen = false;
+
+		Array.from(e.currentTarget.closest(".dropdown").querySelectorAll("input[type='number']"))
+			.forEach(i => {
+				const val = parseInt(i.value) || 0;
+				eight ||= val >= 8;
+				sixteen ||= val >= 16;
+			});
+		heatMilestones[0].checked = eight;
+		heatMilestones[1].checked = sixteen;
+		heatMilestones[0].dispatchEvent(new Event("change"));
+		heatMilestones[1].dispatchEvent(new Event("change"));
 	})
 
 	return input;
